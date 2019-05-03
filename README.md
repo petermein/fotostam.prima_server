@@ -1,0 +1,1 @@
+# fotostam.prima_server
