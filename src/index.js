@@ -6,33 +6,20 @@ const path = require('path')
 
 const resolvers = {
   Query: {
-    posts: (_, args, context, info) => {
-      return context.prisma.query.posts(
+    openOrders: (_, args, context, info) => {
+      return context.prisma.query.orders(
         {
           where: {
-            OR: [
-              { title_contains: args.searchString },
-              { content_contains: args.searchString }
-            ]
+            status: 'OPEN'
           }
         },
         info
       )
     },
-    user: (_, args, context, info) => {
-      return context.prisma.query.user(
-        {
-          where: {
-            id: args.id
-          }
-        },
-        info
-      )
-    }
   },
   Mutation: {
-    createDraft: (_, args, context, info) => {
-      return context.prisma.mutation.createPost(
+    createOrder: (_, args, context, info) => {
+      return context.prisma.mutation.createOrder(
         {
           data: {
             title: args.title,
@@ -48,39 +35,6 @@ const resolvers = {
         info
       )
     },
-    publish: (_, args, context, info) => {
-      return context.prisma.mutation.updatePost(
-        {
-          where: {
-            id: args.id
-          },
-          data: {
-            published: true
-          }
-        },
-        info
-      )
-    },
-    deletePost: (_, args, context, info) => {
-      return context.prisma.mutation.deletePost(
-        {
-          where: {
-            id: args.id
-          }
-        },
-        info
-      )
-    },
-    signup: (_, args, context, info) => {
-      return context.prisma.mutation.createUser(
-        {
-          data: {
-            name: args.name
-          }
-        },
-        info
-      )
-    }
   },
   Node: {
     __resolveType() {

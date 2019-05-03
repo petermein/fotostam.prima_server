@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "deploy": "prisma deploy --env-file .env",
-    "start": "node src/index.js"
+    "deploy:force": "prisma deploy --force --env-file .env",
+    "start": "node src/index.js",
+    "seed": "node database/seed.js --env-file .env"
   },
   "keywords": [],
   "author": "",

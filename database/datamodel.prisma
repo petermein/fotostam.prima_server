@@ -1,13 +1,22 @@
-type User {
+type Order {
   id: ID! @id
-  email: String @unique
-  name: String!
-  posts: [Post!]!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String
+  group: String
+  status: Category
+  photos: [Photo!]!
 }
 
-type Post {
+type Photo {
   id: ID! @id
-  title: String!
-  published: Boolean! @default(value: false)
-  author: User @relation(link: INLINE)
-} 
+  tag: String!
+  amount: Int!
+  order: Order! @relation(link: INLINE)
+}
+
+enum Category {
+  OPEN
+  PRODUCTION
+  DONE
+}
