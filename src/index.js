@@ -3,6 +3,8 @@ const { ApolloServer } = require('apollo-server')
 const { importSchema } = require('graphql-import')
 const { Prisma } = require('prisma-binding')
 const path = require('path')
+const { Client } = require('@elastic/elasticsearch')
+const client = new Client({ node: process.env.ELASTICSEARCH_HOST || 'http://localhost:9200'  })
 
 const resolvers = {
   Query: {
@@ -16,19 +18,34 @@ const resolvers = {
         info
       )
     },
+    findImage: (_, args, context, info) => {
+        return client.search({
+          index: 'fotoindex',
+          body: { 
+            query: {
+              match : {
+                filename: args.tag
+              }
+            }
+          }
+        }, (err, result) => {
+          console.log(result);
+          console.log(result.meta.request)
+          if (err) console.log(err)
+      })
+    }
   },
   Mutation: {
     createOrder: (_, args, context, info) => {
+      console.log(args);
       return context.prisma.mutation.createOrder(
         {
           data: {
-            title: args.title,
-            content: args.content,
-            slug: args.slug,
-            author: {
-              connect: {
-                id: args.authorId
-              }
+            name: args.order.name,
+            group: args.order.group,
+            status: args.order.status,
+            photos: {
+              create: args.order.photos
             }
           }
         },

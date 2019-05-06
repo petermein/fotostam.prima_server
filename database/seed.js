@@ -10,11 +10,22 @@ const db = new Prisma({
 const setup = async () => {
     const order = await db.mutation.createOrder({
         data: {
-            id: 1,
+            
             name: 'First order',
             group: 'Welpen',
             status: 'OPEN',
-            photos: []
+            photos: {
+                create: [
+                {
+                    tag: 'A-123',
+                    amount: 2
+                },
+                {
+                    tag: 'G-123',
+                    amount: 1
+                }
+            ]
+            }
         }
     });
 }

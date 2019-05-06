@@ -1,12 +1,38 @@
 # import Post from './generated/prisma.graphql'
 # import User from './generated/prisma.graphql'
+# import Category from './generated/prisma.graphql'
+
+input PostOrderInput {
+  name: String!
+  group: String!
+  status: Category!,
+  photos: [PhotoInput!]!
+}
+
+input PhotoInput {
+  tag: String!
+  amount: Int!
+}
+
+type IndexedImage {
+   _id: String
+   _index: String
+   _type: String
+  camera: String
+  filename: String!
+  height: Int
+  size:	String
+  time: Int
+  width: Int
+}
+
+
 
 type Query {
-  openOrders: [Order!]!
+  openOrders: [Order!]!,
+  findImage(tag: String): IndexedImage
 }
 
 type Mutation {
-  createOrder(
-    id: ID!
-  ): Order
+  createOrder(order: PostOrderInput): Order
 }
